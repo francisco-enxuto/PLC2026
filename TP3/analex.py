@@ -2,9 +2,9 @@
 import sys
 import re
 
-def tokenize(input_string):
+def tokenize(input_string, id_linha):
     reconhecidos = []
-    linha = 1
+    linha = id_linha
     mo = re.finditer(r'(?P<PR>[sS][eE][lL][eE][cC][tT]|[lL][iI][mM][iI][tT]|[wW][hH][eE][rR][eE])|(?P<C>#.*)|(?P<IDV>\?\w+)|(?P<IDL>@[a-zA-Z]{2})|(?P<STR>".*?")|(?P<N>\d+)|(?P<IDC>(?<= |:)(\w+))|(?P<D>\{|\}|\.)|(?P<SKIP>[ \t])', input_string)
     for m in mo:
         dic = m.groupdict()
@@ -40,7 +40,7 @@ def tokenize(input_string):
         if not dic['SKIP'] and not dic['C']and t[0] != 'UNKNOWN': reconhecidos.append(t)
     return reconhecidos
 
-for linha in sys.stdin:
-    for tok in tokenize(linha):
+for id_linha, linha in enumerate(sys.stdin):
+    for tok in tokenize(linha, id_linha):
         print(tok)    
 
